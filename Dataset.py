@@ -1,13 +1,24 @@
 import os
 import numpy as np
 from PIL import Image
-from sklearn.model_selection import train_test_split
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from google.colab import drive
+from sklearn.utils import class_weight
+import traceback
+
+# Mount Google Drive
+drive.mount('/content/drive')
+
+# Updated paths for training from Google Drive
+train_dir = '/content/drive/My Drive/DATASET/train'
+val_dir = '/content/drive/My Drive/DATASET/val'
+test_dir = '/content/drive/My Drive/DATASET/test'
 
 def load_images_and_labels(image_directory):
     """
     Load images from the specified directory and assign labels.
-    Assumes that the folder names indicate the classes (1: Glaucoma Present, 0: Glaucoma not Present).
+    Assumes that the folder names indicate the classes:
+    '0' for class 0 (Glaucoma_Negative) and '1' for class 1 (Glaucoma_Positive).
     """
     images = []
     labels = []
@@ -27,13 +38,14 @@ def load_images_and_labels(image_directory):
                         images.append(np.array(img))
 
                     # Assign label based on the directory name
-                    if '1' in root:  # 1: Glaucoma Present
+                    if '1' in root:  # Glaucoma Present (1)
                         labels.append(1)
-                    elif '0' in root:  # 0: Glaucoma not Present
+                    elif '0' in root:  # Glaucoma Not Present (0)
                         labels.append(0)
 
                 except Exception as e:
                     print(f"Failed to load image {image_path}: {e}")
+                    traceback.print_exc()
             else:
                 print(f"Skipping non-image file: {image_path}")
 
@@ -47,8 +59,8 @@ def preprocess_images(images, target_size=(224, 224)):
     resized_images = []
 
     for img in images:
-        # Resize image to the target size
-        img_resized = np.array(Image.fromarray(img).resize(target_size))
+        # Resize image to the target size with high-quality interpolation
+        img_resized = np.array(Image.fromarray(img).resize(target_size, Image.ANTIALIAS))
         resized_images.append(img_resized)
 
         # Print shapes for debugging
@@ -76,47 +88,60 @@ def create_image_generators(train_dir, val_dir, test_dir, target_size=(224, 224)
     val_datagen = ImageDataGenerator(rescale=1./255)
     test_datagen = ImageDataGenerator(rescale=1./255)
 
-    # Flow images in batches from directories
+    # Flow images in batches from directories (seed added here)
     train_generator = train_datagen.flow_from_directory(
         train_dir,
         target_size=target_size,
         batch_size=batch_size,
-        class_mode='binary'
+        class_mode='binary',  # Use 'binary' since you have two classes
+        classes=['1', '0'],   # Ensure class names are strings as per your directory structure
+        seed=42  # Set seed here for reproducibility
     )
 
     val_generator = val_datagen.flow_from_directory(
         val_dir,
         target_size=target_size,
         batch_size=batch_size,
-        class_mode='binary'
+        class_mode='binary',
+        classes=['1', '0'],   # Ensure class names are strings as per your directory structure
+        seed=42  # Set seed here for reproducibility
     )
 
     test_generator = test_datagen.flow_from_directory(
         test_dir,
         target_size=target_size,
         batch_size=batch_size,
-        class_mode='binary'
+        class_mode='binary',
+        classes=['1', '0']    # Ensure class names are strings as per your directory structure
     )
 
     return train_generator, val_generator, test_generator
 
-def main():
-    # Define paths for images in your dataset
-    train_dir = '/content/drive/My Drive/DATASET/train'
-    val_dir = '/content/drive/My Drive/DATASET/val'
-    test_dir = '/content/drive/My Drive/DATASET/test'
-
-    print("Setting up image generators...")
-    train_gen, val_gen, test_gen = create_image_generators(train_dir, val_dir, test_dir)
-
-    # Print out the class indices for debugging
-    print(f"Class indices: {train_gen.class_indices}")
-
-    # Training set example
-    print(f"Training data: {train_gen.samples} images")
-    print(f"Validation data: {val_gen.samples} images")
-    print(f"Test data: {test_gen.samples} images")
+def calculate_class_weights(generator):
+    """
+    Calculate class weights based on the generator's class distribution.
+    """
+    class_counts = np.bincount(generator.classes)
+    class_weights = class_weight.compute_class_weight(
+        class_weight='balanced',
+        classes=np.unique(generator.classes),
+        y=generator.classes
+    )
+    return dict(enumerate(class_weights))
 
 if __name__ == "__main__":
-    main()
+    # Instantiate the image generators
+    print("Creating image generators...")
+    train_gen, val_gen, test_gen = create_image_generators(train_dir, val_dir, test_dir)
+
+    # Calculate class weights
+    class_weights = calculate_class_weights(train_gen)
+    print("Class Weights:", class_weights)
+
+    # Print out class indices for verification
+    print(f"Class indices (train): {train_gen.class_indices}")
+    print(f"Number of training samples: {train_gen.samples}")
+    print(f"Number of validation samples: {val_gen.samples}")
+    print(f"Number of test samples: {test_gen.samples}")
+
 
