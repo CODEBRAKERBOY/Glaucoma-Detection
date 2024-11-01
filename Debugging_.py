@@ -1,83 +1,96 @@
 import os
 import numpy as np
-import cv2
-from tensorflow.keras.utils import to_categorical
-import matplotlib.pyplot as plt  # For visualization
+from PIL import Image
+import matplotlib.pyplot as plt
+from collections import Counter
+import random
 
-# Paths to image and mask directories
-IMAGE_PATH = r'/content/drive/My Drive/REFUGE2/train/images/dummy_class'
-MASK_PATH = r'/content/drive/My Drive/REFUGE2/train/mask/dummy_class'  # Fixed mask path
+# Function to load images and labels from a directory
+def load_images_and_labels(image_directory):
+    images = []
+    labels = []
+    valid_image_extensions = {'.jpg', '.jpeg', '.png', '.bmp', '.tiff'}
 
-# Parameters
-IMAGE_SIZE = (224, 224)
-NUM_CLASSES = 3  # Adjust based on the number of classes in your mask
+    for root, dirs, files in os.walk(image_directory):
+        for file in files:
+            image_path = os.path.join(root, file)
 
-def load_image(image_path):
-    """Load and resize image."""
-    img = cv2.imread(image_path)
-    if img is None:
-        print(f"Warning: Unable to load image at {image_path}")
-        return None
-    img = cv2.resize(img, IMAGE_SIZE)
-    img = img / 255.0  # Normalize to [0, 1]
-    return img
+            if os.path.splitext(file)[1].lower() in valid_image_extensions:
+                try:
+                    with Image.open(image_path) as img:
+                        img = img.convert('RGB')
+                        images.append(np.array(img))
 
-def load_mask(mask_path):
-    """Load and resize mask."""
-    mask = cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE)  # Load as grayscale for segmentation masks
-    if mask is None:
-        print(f"Warning: Unable to load mask at {mask_path}")
-        return None
-    mask = cv2.resize(mask, IMAGE_SIZE)
-    mask = mask / 255.0  # Normalize to [0, 1]
-    mask = to_categorical(mask, num_classes=NUM_CLASSES)  # Convert to one-hot encoding
-    return mask
+                    # Assign label based on directory name
+                    if '1' in root:
+                        labels.append(1)
+                    elif '0' in root:
+                        labels.append(0)
 
-def process_single_image_and_mask(image_dir, mask_dir):
-    # Get image and mask files
-    image_files = [f for f in os.listdir(image_dir) if f.endswith('.jpg')]
-    mask_files = [f for f in os.listdir(mask_dir) if f.endswith('.bmp')]  # Assuming masks are in .bmp format
-    
-    if not image_files or not mask_files:
-        raise ValueError("No image or mask files found in the specified directories.")
-    
-    img_file = image_files[0]  # You can adjust this to load specific files or loop through all
-    msk_file = mask_files[0]
-    
-    img_path = os.path.join(image_dir, img_file)
-    msk_path = os.path.join(mask_dir, msk_file)
-    
-    img = load_image(img_path)
-    msk = load_mask(msk_path)
-    
-    if img is not None and msk is not None:
-        # Debug outputs
-        print(f"Processed {img_file}: Image shape {img.shape}")
-        print(f"Processed {msk_file}: Mask shape {msk.shape}")
-    else:
-        print("Error processing the image or mask.")
-    
-    return img, msk
+                except Exception as e:
+                    print(f"Failed to load image {image_path}: {e}")
+            else:
+                print(f"Skipping non-image file: {image_path}")
 
-def display_image_and_mask(img, mask):
-    """Display the image and mask."""
-    plt.figure(figsize=(10, 5))
-    
-    # Display image
-    plt.subplot(1, 2, 1)
-    plt.title("Image")
-    plt.imshow(img)
-    plt.axis('off')
-    
-    # Display mask
-    plt.subplot(1, 2, 2)
-    plt.title("Mask")
-    plt.imshow(np.argmax(mask, axis=-1), cmap='gray')  # Show mask as categorical labels
-    plt.axis('off')
-    
+    return images, labels
+
+# Function to visualize a sample of images and their labels
+def visualize_samples(images, labels, num_samples=5):
+    if len(images) < num_samples:
+        print(f"Not enough images to display. Available: {len(images)}")
+        num_samples = len(images)
+
+    class_0_indices = [i for i, label in enumerate(labels) if label == 0]
+    class_1_indices = [i for i, label in enumerate(labels) if label == 1]
+
+    sampled_indices = random.sample(class_0_indices, min(num_samples // 2, len(class_0_indices))) + \
+                      random.sample(class_1_indices, min(num_samples // 2, len(class_1_indices)))
+
+    plt.figure(figsize=(15, 5))
+    for i, idx in enumerate(sampled_indices):
+        plt.subplot(1, num_samples, i + 1)
+        plt.imshow(images[idx])
+        plt.title(f"Label: {labels[idx]}")
+        plt.axis('off')
+    plt.show()
+
+# Function to check and print class distribution
+def check_class_distribution(labels):
+    counter = Counter(labels)
+    print("Class distribution:", dict(counter))
+
+# Function to visualize label distribution
+def visualize_label_distribution(labels):
+    counter = Counter(labels)
+    classes = list(counter.keys())
+    counts = list(counter.values())
+
+    plt.figure(figsize=(8, 5))
+    plt.bar(classes, counts, color=['blue', 'orange'])
+    plt.xlabel('Classes')
+    plt.ylabel('Counts')
+    plt.title('Class Distribution')
+    plt.xticks(classes, ['Glaucoma Negative (0)', 'Glaucoma Positive (1)'])
     plt.show()
 
 if __name__ == "__main__":
-    img, msk = process_single_image_and_mask(IMAGE_PATH, MASK_PATH)
-    if img is not None and msk is not None:
-        display_image_and_mask(img, msk)
+    # Set your training directory here
+    train_dir = '/content/drive/My Drive/DATASET/train'
+
+    # Load images and labels
+    print("Loading and verifying training images...")
+    train_images, train_labels = load_images_and_labels(train_dir)
+
+    # Check and print class distribution
+    check_class_distribution(train_labels)
+
+    # Visualize label distribution
+    print("Visualizing label distribution...")
+    visualize_label_distribution(train_labels)
+
+    # Visualize some samples from the training set
+    print("Visualizing a sample of training images...")
+    visualize_samples(train_images, train_labels)
+
+    # Print the number of images loaded
+    print(f"Loaded {len(train_images)} images with corresponding labels.")
