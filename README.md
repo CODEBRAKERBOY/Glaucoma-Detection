@@ -80,13 +80,14 @@ Make sure you have the following modules for optimal performance:
 ## Dataset Structure
 The dataset should be structured as follows:
 
-DATASET
-├── train/
-│   ├── Glaucoma_Positive/
-│   └── Glaucoma_Negative/
-└── val/
-    ├── Glaucoma_Positive/
-    └── Glaucoma_Negative/
+DATASET  
+├── train/  
+│   ├── Glaucoma_Positive/  
+│   └── Glaucoma_Negative/  
+└── val/  
+    ├── Glaucoma_Positive/  
+    └── Glaucoma_Negative/  
+
 
 
 
