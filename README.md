@@ -16,27 +16,59 @@ This solution, once optimized, could assist in developing automated systems for 
 <div align="center">
 
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
+![NumPy](https://img.shields.io/badge/numpy-%23013243.svg?style=for-the-badge&logo=numpy&logoColor=white)
+![Pandas](https://img.shields.io/badge/pandas-%23150458.svg?style=for-the-badge&logo=pandas&logoColor=white)
 ![scikit-learn](https://img.shields.io/badge/scikit--learn-%23F7931E.svg?style=for-the-badge&logo=scikit-learn&logoColor=white)
-![PyTorch](https://img.shields.io/badge/pytorch-EE4C2B?style=for-the-badge&logo=pytorch&logoColor=white)
-![Deep Learning](https://img.shields.io/badge/deep%20learning-000000?style=for-the-badge&logo=ai&logoColor=white)
-![OpenCV](https://img.shields.io/badge/OpenCV-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white)
-![Matplotlib](https://img.shields.io/badge/Matplotlib-003B57?style=for-the-badge&logo=matplotlib&logoColor=white)
+![Keras](https://img.shields.io/badge/Keras-%23D00000.svg?style=for-the-badge&logo=Keras&logoColor=white)
+![TensorFlow](https://img.shields.io/badge/TensorFlow-%23FF6F00.svg?style=for-the-badge&logo=TensorFlow&logoColor=white)
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white)
+![Bootstrap](https://img.shields.io/badge/bootstrap-%238511FA.svg?style=for-the-badge&logo=bootstrap&logoColor=white)
+![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
+![Flask](https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=white)
+![Jupyter Notebook](https://img.shields.io/badge/jupyter-%23FA0F00.svg?style=for-the-badge&logo=jupyter&logoColor=white)
+![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-0078d7.svg?style=for-the-badge&logo=visual-studio-code&logoColor=white)
 
 </div>
 <br>
 
 ## Required Modules
 
-To run this project, you need to install the following Python packages. You can install them using pip:
+## Required Modules
 
-- `torch`
-- `torchvision`
-- `torchaudio`
-- `numpy`
+- **numpy**: Array manipulation and numerical operations
+- **pandas**: Data manipulation and analysis
+- **scikit-learn**: Machine learning utilities like metrics and preprocessing
+
+### Deep Learning and Image Processing
+- **tensorflow**: Deep learning framework; includes Keras for model building
+- **keras**: Interface for the TensorFlow deep learning framework (optional if using TensorFlow 2.x)
+- **opencv-python**: Image processing library (optional, for image transformations)
+- **Pillow**: Image processing library, used with Keras for loading images
+
+### Visualization
+- **matplotlib**: Plotting and visualization of data and model metrics
+- **seaborn**: Statistical data visualization (optional, enhances matplotlib)
+
+
+You can install the modules individually with pip install, or add them to a requirements.txt file:
+
+- `pandas`
+- `scikit-learn`
+- `tensorflow`
 - `opencv-python`
 - `matplotlib`
 - `scikit-learn`
-- `pandas`
+- `seaborn`
+- `numpy`  
+
+
+
+
+
+
+
 
 ## Additional Dependencies
 
