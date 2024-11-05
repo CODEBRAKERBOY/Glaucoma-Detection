@@ -61,13 +61,40 @@ You can install the modules individually with pip install, or add them to a requ
 - `matplotlib`
 - `scikit-learn`
 - `seaborn`
-- `numpy`  
+- `numpy`
 
+  * Start by opening Google Colab.
 
+* Ensure that you have access to a TPU by selecting `Runtime` > `Change runtime type` > `Hardware accelerator` > `TPU`.
 
+* Clone the repository using the following command:
 
+    ```bash
+    !git clone https://github.com/CODEBRAKERBOYY/GlaucomaDetection.git
+    ```
 
+* Change into the cloned directory:
 
+    ```bash
+    %cd GlaucomaDetection
+    ```
+
+* Install the required modules by running:
+
+    ```bash
+    !pip install -r requirements.txt
+    ```
+
+* To train your model or make predictions, run the following command:
+
+    ```bash
+    !python main.py [arguments]
+    ```
+
+    **Arguments:**
+    - `train_model` - Specify this if you want to train the model before inference.
+    - `existing` - Use this after the `train_model` argument if you want to retrain an existing model.
+    - `make_predictions` / `None` - This loads the existing model for inference.
 
 
 ## Additional Dependencies
@@ -87,7 +114,5 @@ DATASET
 └── val/  
     ├── Glaucoma_Positive/  
     └── Glaucoma_Negative/  
-
-
 
 
