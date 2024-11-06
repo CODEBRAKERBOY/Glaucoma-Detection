@@ -126,7 +126,8 @@ DATASET
 
   ### Image Processing
 
-  ![Image Processing](https://github.com/CODEBRAKERBOYY/Glaucoma-Detection/blob/main/assets/)
+  ![Image Processing](https://github.com/CODEBRAKERBOYY/Glaucoma-Detection/blob/main/assets/IMAGE%20PROCESSING.png)
+
   
 
 
