@@ -115,4 +115,16 @@ DATASET
     ├── Glaucoma_Positive/  
     └── Glaucoma_Negative/  
 
+    * While giving path as input always remember it consists only tow class one is Negative and other is Positive.
+* Perform image preprocesssing if you think it's necessary otherwise skip it.
+* Path for data images if you wants to retrain model:
+* https://drive.google.com/drive/folders/1M89d5jKBInbhvmEC95zn51zD6A25HKbF?usp=share_link
+
+  ### Accuracy plot
+
+![Accuracy Plot](https://github.com/CODEBRAKERBOYY/Glaucoma-Detection/blob/main/assets/Unknown-13.png)
+
+
+
+
 
