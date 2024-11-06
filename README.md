@@ -113,6 +113,9 @@ DATASET
 └── val/  
     ├── Glaucoma_Positive/  
     └── Glaucoma_Negative/  
+└── test/  
+    ├── Glaucoma_Positive/  
+    └── Glaucoma_Negative/  
 
     * While giving path as input always remember it consists only tow class one is Negative and other is Positive.
 * Perform image preprocesssing if you think it's necessary otherwise skip it.
