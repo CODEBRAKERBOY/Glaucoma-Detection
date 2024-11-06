@@ -33,7 +33,6 @@ This solution, once optimized, could assist in developing automated systems for 
 </div>
 <br>
 
-## Required Modules
 
 ## Required Modules
 
