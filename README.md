@@ -130,7 +130,8 @@ DATASET
   ![Image Processing](https://github.com/CODEBRAKERBOYY/Glaucoma-Detection/blob/main/assets/IMAGE%20PROCESSING.png)
 
   ## Image processing chart
-  ![Image Processing chart](https://raw.githubusercontent.com/CODEBRAKERBOYY/Glaucoma-Detection/main/assets/assets/images.png)
+  ![Image Processing chart](https://github.com/CODEBRAKERBOYY/Glaucoma-Detection/blob/main/assets/assets/images.png)
+  
 
 
 
